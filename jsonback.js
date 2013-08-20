@@ -1,9 +1,18 @@
-window.JSON = (function(d,i,j){
+window.JSON = (function(win, doc, iframe, iframejson){
 	"use strict";
-	i = d.createElement("iframe");
-	d.body.appendChild(i);
-	j = i.contentWindow.JSON;
-	d.body.removeChild(i);
 
-	return (!j.hasOwnProperty('parse') || !j.hasOwnProperty('stringify')) ? window.JSON || {} : j;
-})(document);
+	function isJSONy(obj) {
+		return (!obj.hasOwnProperty('parse') || !obj.hasOwnProperty('stringify'));
+	}
+
+	if (isJSONy(win.JSON)) {
+		return win.JSON;
+	}
+
+	iframe = doc.createElement("iframe");
+	doc.body.appendChild(iframe);
+	iframejson = iframe.contentWindow.JSON;
+	doc.body.removeChild(iframe);
+
+	return isJSONy(iframejson) ? win.JSON || {} : iframejson;
+})(this, document);
