@@ -1,4 +1,4 @@
-window.JSON = (function(win, doc, iframe, iframejson){
+(function(win, doc, iframe, iframejson){
 	"use strict";
 
 	function isJSONy(obj) {
@@ -14,5 +14,5 @@ window.JSON = (function(win, doc, iframe, iframejson){
 	iframejson = iframe.contentWindow.JSON;
 	doc.body.removeChild(iframe);
 
-	return isJSONy(iframejson) ? win.JSON || {} : iframejson;
+	win.JSON = isJSONy(iframejson) ? win.JSON || {} : iframejson;
 })(this, document);
