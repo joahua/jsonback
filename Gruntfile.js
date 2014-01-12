@@ -6,6 +6,12 @@ module.exports = function(grunt) {
     jshint: {
       all: ['Gruntfile.js', 'jsonback.js']
     },
+    mocha: {
+      src: 'test/test.html',
+      options: {
+        run: true,
+      }
+    },
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -20,10 +26,11 @@ module.exports = function(grunt) {
   });
 
   // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint','uglify']);
+  grunt.registerTask('default', ['jshint', 'uglify']);
 
 };

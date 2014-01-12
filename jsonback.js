@@ -1,18 +1,30 @@
-(function(win, doc, iframe, iframejson){
-	"use strict";
+(function(window, document, iframe, iframejson){
+    "use strict";
 
-	function isJSONy(obj) {
-		return (!obj.hasOwnProperty('parse') || !obj.hasOwnProperty('stringify'));
-	}
+    function isJSONy(obj) {
+        return (obj.hasOwnProperty('parse') && obj.hasOwnProperty('stringify'));
+    }
 
-	if (isJSONy(win.JSON)) {
-		return win.JSON;
-	}
+    // http://stackoverflow.com/a/122190
+    function clone(obj){
+        if(obj === null || typeof(obj) !== 'object')
+            return obj;
 
-	iframe = doc.createElement("iframe");
-	doc.body.appendChild(iframe);
-	iframejson = iframe.contentWindow.JSON;
-	doc.body.removeChild(iframe);
+        var temp = obj.constructor(); // changed
 
-	win.JSON = isJSONy(iframejson) ? win.JSON || {} : iframejson;
+        for(var key in obj)
+            temp[key] = clone(obj[key]);
+        return temp;
+    }
+
+    if (isJSONy(window.JSON))
+        return window.JSON;
+
+    iframe = document.createElement("iframe");
+    document.body.appendChild(iframe);
+    iframejson = clone(iframe.contentWindow.JSON);
+    document.body.removeChild(iframe);
+
+    window.JSON = isJSONy(iframejson) ? window.JSON || {} : iframejson;
+    
 })(this, document);
